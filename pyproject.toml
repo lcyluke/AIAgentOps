@@ -1,0 +1,13 @@
+[project]
+name = "aiagentops"
+version = "1.0.0"
+description = "AIAgentOps — cross-runtime multi-agent orchestrator for Kiro/Claude Code/Hermes"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2", "typer>=0.12"]
+
+[project.scripts]
+apex = "apex.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

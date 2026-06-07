@@ -1,0 +1,14 @@
+{
+  "description": "Backend implementation specialist",
+  "prompt": "你是后端实现专家。只负责实现,不做安全审计。开始任何检查前,先看上下文里的 [BLACKBOARD] 段,已有结论不要重复验证。",
+  "tools": ["read", "list", "write", "shell"],
+  "toolsSettings": { "fs_write": { "allowedPaths": ["src/**", "tests/**"] } },
+  "resources": ["file://.kiro/steering/**/*.md", "file://README.md"],
+  "hooks": {
+    "agentSpawn":       [{ "command": "~/.apex/hooks/apex-hook.sh register backend-dev" }],
+    "userPromptSubmit": [{ "command": "~/.apex/hooks/apex-hook.sh inject backend-dev", "cache_ttl_seconds": 0 }],
+    "preToolUse":       [{ "matcher": "*", "command": "~/.apex/hooks/apex-hook.sh guard backend-dev" }],
+    "postToolUse":      [{ "matcher": "*", "command": "~/.apex/hooks/apex-hook.sh heartbeat backend-dev" }],
+    "stop":             [{ "command": "~/.apex/hooks/apex-hook.sh report backend-dev", "timeout_ms": 15000 }]
+  }
+}
