@@ -5,7 +5,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from apex.security.redactor import redact, redact_dict
 from apex.core.tool_risk import evaluate, tool_allowed_for_role, normalize_role
-from apex.core.auditor import StagnationGuard, Auditor
+from apex.core.auditor import Auditor
+from apex.core.stagnation import StagnationGuard
 
 
 def test_redactor_masks_secrets():
@@ -66,8 +67,8 @@ def test_stagnation_guard():
     assert not g.is_repeated_failure("read", {"p": "a"})
     g.record("read", {"p": "a"}, success=False)
     assert g.is_repeated_failure("read", {"p": "a"})       # 2nd fail trips it
-    assert g.effective_max_steps(20) < 20                  # consecutive penalty
-    g.record("read", {"p": "a"}, success=True)             # success clears
+    assert g.apply_penalty(20) < 20                         # consecutive penalty
+    g.record("read", {"p": "a"}, success=True)              # success clears
     assert not g.is_repeated_failure("read", {"p": "a"})
     print("✓ stagnation guard")
 
@@ -78,7 +79,8 @@ def test_auditor_block_loop():
     # unmet -> block, until cap exceeded
     assert a.decide_stop("t1", crit, cwd="/tmp").get("decision") == "block"
     assert a.decide_stop("t1", crit, cwd="/tmp").get("decision") == "block"
-    assert a.decide_stop("t1", crit, cwd="/tmp") == {}     # cap exceeded -> give up
+    # cap exceeded -> allow stop (give up blocking, caller marks failed)
+    assert a.decide_stop("t1", crit, cwd="/tmp").get("decision") == "allow"
     assert a.block_exceeded("t1")
     # met criterion -> allow stop
     assert a.decide_stop("t2", [], cwd="/tmp") == {}
