@@ -6,6 +6,10 @@
 
 AIAgentOps is the operational backbone for multi-agent systems. It provides a unified layer for spawning, monitoring, auditing, and coordinating AI coding agents across different runtimes — all from a single CLI, TUI, or MCP-enabled IDE.
 
+<p align="center">
+  <img src="demo.gif" alt="AIAgentOps Demo" width="100%">
+</p>
+
 ### Architecture
 
 ```
