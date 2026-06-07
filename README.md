@@ -12,6 +12,10 @@ AIAgentOps is the operational backbone for multi-agent systems. It provides a un
 
 ### Architecture
 
+<p align="center">
+  <img src="architecture.svg" alt="AIAgentOps Architecture" width="100%">
+</p>
+
 ```
 ┌───────────── Surfaces ─────────────────────────────────────┐
 │  CLI (Typer)    TUI (Rich)    MCP (TS)    Installer Skill │
