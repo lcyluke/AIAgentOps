@@ -766,5 +766,13 @@ def _run_daemon(host: str, port: int, cfg: dict) -> None:
 
 
 # ── Entry point ───────────────────────────────────────────────────────────
+
+# Register fleet commands
+try:
+    from apex.cli_fleet import register_fleet
+    register_fleet(app)
+except ImportError:
+    pass
+
 if __name__ == "__main__":
     app()
